@@ -1,0 +1,28 @@
+//Add Mongo for project
+cd src/Play.Catalog.Service
+dotnet add package MongoDB.Driver --version 2.18.0
+Later versions have issues with Cosmos DB
+
+
+//Run Mongo Container
+//For windows
+cd Play.Catalog
+docker run -d --rm --name mongo -p 27017:27017 -v mongodbdata:/data/db/ mongo
+
+//For mac
+docker pull mongo:latest
+docker run -d --rm --name mongo -p 27017:27017 -v mongodbdata:/data/db/ mongo
+
+
+//Check Mongo Container was alread installed
+docker ps
+
+//Add package on local, -n is a name that what you want to name it
+//stand at Play.Catalog, should use absolute path
+dotnet nuget add source /Users/sonpham/Projects/dotnetacademy/microservices/Microservices_MyExercise/packages -n PlayEconomy 
+
+//Stand at src/Play.Catlog.Service
+dotnet add package Play.Common
+
+//Stand at src/Play.Catalog.Contracts
+dotnet pack -o ..\..\..\packages\
