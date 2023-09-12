@@ -26,3 +26,9 @@ dotnet add package Play.Common
 
 //Stand at src/Play.Catalog.Contracts
 dotnet pack -o ..\..\..\packages\
+
+//after push Play.Common to nuget package, we remove PlayEconomy from local
+dotnet nuget remove source PlayEconomy
+
+//check nuget in project
+dotnet nuget list source
