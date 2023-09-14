@@ -30,7 +30,13 @@ dotnet nuget push ../packages/Play.Catalog.Contracts.$version.nupkg --api-key $g
 ```powershell
 $env:GH_OWNER="samphamdotnetmicroservices02"
 $env:GH_PAT="[PAT HERE]"
+$acrName="samphamplayeconomyacr"
+
 docker build --secret id=GH_OWNER --secret id=GH_PAT -t play.catalog:$version .
+
+or
+
+docker build --secret id=GH_OWNER --secret id=GH_PAT -t "$acrName.azurecr.io/play.catalog:$version" .
 
 -t is tag, tag is really a human friendly way to identify your Docker image, in this case, in your 
 box. And it is composed of two parts. The first part is going to be kind of the name of image, and
@@ -99,4 +105,41 @@ docker run -it --rm -p 5000:5000 --name catalog -e MongoDbSettings__Host=mongo -
 if you do not use MongoDb and RabbitMQ from Play.Infra, you can remove --network playinfra_default
 
 docker run -it --rm -p 5000:5000 --name catalog -e MongoDbSettings__ConnectionString=$cosmosDbConnString -e ServiceBusSetting__ConnectionString=$serviceBusConnString -e ServiceSettings__MessageBroker="SERVICEBUS" play.catalog:$version
+```
+
+## Publish the image
+```powershell
+$acrName="samphamplayeconomyacr"
+
+az acr login --name $acrName
+
+docker tag play.catalog:$version "$acrName.azurecr.io/play.catalog:$version"
+
+docker images (check your images for ACR)
+
+docker push "$acrName.azurecr.io/play.catalog:$version" (go to your ACR -> Repositories to check your images)
+
+
+az acr login: in order to be able to publish anything into ACR, you will have to first log in into it. Because remember that an ACR is a private repository.
+So people cannot just connect to it from anywhere without providing credentials. It is not a repository like it will be the case in Docker Hub.
+This is private, so you need credentials to be able to access it. So to do that, what you can do is use the AZ ACR login command from Azure CLI
+
+docker tag play.catalog:$version: The next thing we want to do is a retagging of your image, so that it is ready to be published to ACR. In order to be
+able to publish these to ACR, you have to have the name of the repository of your image, has to match a combination of the login server of your ACR
+and the accurate repository name (samphamplayeconomyacr.azurecr.io/play.catalog:$version, samphamplayeconomyacr.azurecr.io comes from your login server of ACR)
+
+docker push: publishing image
+```
+
+```mac
+acrName="samphamplayeconomyacr"
+
+az acr login --name $acrName
+
+docker tag play.catalog:$version "$acrName.azurecr.io/play.catalog:$version"
+
+docker images (check your images for ACR)
+
+docker push "$acrName.azurecr.io/play.catalog:$version" (go to your ACR -> Repositories to check your images)
+
 ```
