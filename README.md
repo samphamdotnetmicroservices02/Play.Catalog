@@ -3,7 +3,7 @@ Common library used by Play Economy services.
 
 ## Create and publish package
 ```powershell
-$version="1.0.1"
+$version="1.0.2"
 $owner="samphamdotnetmicroservices02"
 $gh_pat="[PAT HERE]"
 
@@ -15,7 +15,7 @@ dotnet nuget push ..\packages\Play.Catalog.Contracts.$version.nupkg --api-key $g
 ```
 
 ```mac
-version="1.0.1"
+version="1.0.2"
 owner="samphamdotnetmicroservices02"
 gh_pat="[PAT HERE]"
 
@@ -32,7 +32,7 @@ $env:GH_OWNER="samphamdotnetmicroservices02"
 $env:GH_PAT="[PAT HERE]"
 docker build --secret id=GH_OWNER --secret id=GH_PAT -t play.catalog:$version .
 
--t is tack, tack is really a human friendly way to identify your Docker image, in this case, in your 
+-t is tag, tag is really a human friendly way to identify your Docker image, in this case, in your 
 box. And it is composed of two parts. The first part is going to be kind of the name of image, and
 the second part is the version that you want to assign to it.
 the "." next to $version is the cecil file , the context for this docker build command, which in this case
@@ -40,7 +40,7 @@ is just going to be ".", this "." represents the current directory
 ```
 
 ```mac
-export GH_OWNER="samphamdotnetmicroservices02" 
+export GH_OWNER="samphamdotnetmicroservices02"
 export GH_PAT="[PAT HERE]"
 docker build --secret id=GH_OWNER --secret id=GH_PAT -t play.catalog:$version .
 check this link for more details about env variable on mac
@@ -54,7 +54,14 @@ docker images
 
 ## Run the docker image
 ```powershell
+$cosmosDbConnString="[CONN STRING HERE]"
+$serviceBusConnString="[CONN STRING HERE]"
+
 docker run -it --rm -p 5000:5000 --name catalog -e MongoDbSettings__Host=mongo -e RabbitMqSettings__Host=rabbitmq --network playinfra_default play.catalog:$version
+
+if you do not use MongoDb and RabbitMQ from Play.Infra, you can remove --network playinfra_default
+
+docker run -it --rm -p 5000:5000 --name catalog -e MongoDbSettings__ConnectionString=$cosmosDbConnString -e ServiceBusSetting__ConnectionString=$serviceBusConnString -e ServiceSettings__MessageBroker="SERVICEBUS" play.catalog:$version
 
 -it: what it does is it creates and kind of an interactive shell, so that you will not able to go back to your
 command line until you cancel the execution of these docker run command.
@@ -84,5 +91,12 @@ And lastly we have to specify the docker image that we want to run (play.catalog
 ```
 
 ```mac
+cosmosDbConnString="[CONN STRING HERE]"
+serviceBusConnString="[CONN STRING HERE]"
+
 docker run -it --rm -p 5000:5000 --name catalog -e MongoDbSettings__Host=mongo -e RabbitMqSettings__Host=rabbitmq --network playinfra_default play.catalog:$version
+
+if you do not use MongoDb and RabbitMQ from Play.Infra, you can remove --network playinfra_default
+
+docker run -it --rm -p 5000:5000 --name catalog -e MongoDbSettings__ConnectionString=$cosmosDbConnString -e ServiceBusSetting__ConnectionString=$serviceBusConnString -e ServiceSettings__MessageBroker="SERVICEBUS" play.catalog:$version
 ```
