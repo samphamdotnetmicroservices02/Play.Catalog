@@ -3,7 +3,7 @@ Common library used by Play Economy services.
 
 ## Create and publish package
 ```powershell
-$version="1.0.2"
+$version="1.0.3"
 $owner="samphamdotnetmicroservices02"
 $gh_pat="[PAT HERE]"
 
@@ -15,7 +15,7 @@ dotnet nuget push ..\packages\Play.Catalog.Contracts.$version.nupkg --api-key $g
 ```
 
 ```mac
-version="1.0.2"
+version="1.0.3"
 owner="samphamdotnetmicroservices02"
 gh_pat="[PAT HERE]"
 
