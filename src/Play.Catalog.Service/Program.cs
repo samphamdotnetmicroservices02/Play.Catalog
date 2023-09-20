@@ -1,74 +1,28 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Play.Catalog.Service;
-using Play.Catalog.Service.Entities;
-using Play.Common.HealthChecks;
-using Play.Common.Identity;
-using Play.Common.MassTransit;
-using Play.Common.MongoDB;
-using Play.Common.Settings;
+using Microsoft.Extensions.Logging;
+using Play.Common.Configurations;
 
-var builder = WebApplication.CreateBuilder(args);
-
-ServiceSettings serviceSettings = builder.Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
-const string AllowedOriginSetting = "AllowedOrigin";
-
-builder.Services
-    .AddMongo()
-    .AddMongoRepository<Item>("items")
-    .AddMassTransitWithMessageBroker(builder.Configuration)
-    .AddJwtBearerAuthentication();
-
-builder.Services.AddAuthorization(options =>
+namespace Play.Catalog.Service
 {
-    options.AddPolicy(Policies.Read, policy =>
+    public class Program
     {
-        policy.RequireRole("Admin");
-        policy.RequireClaim("scope", "catalog.readaccess", "catalog.fullaccess");
-    });
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-    options.AddPolicy(Policies.Write, policy =>
-    {
-        policy.RequireRole("Admin");
-        policy.RequireClaim("scope", "catalog.writeaccess", "catalog.fullaccess");
-    });
-});
-
-builder.Services.AddControllers(options =>
-{
-    options.SuppressAsyncSuffixInActionNames = false;
-});
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddHealthChecks()
-    .AddMongoDb();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseCors(builder =>
-    {
-        builder.WithOrigins(app.Configuration[AllowedOriginSetting])
-            .AllowAnyHeader() //Allows any the headers that the client want to send
-            .AllowAnyMethod(); //Allows any the methods the client side want to use including GET, POST, PUT and all other verbs
-    });
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAzureKeyVault()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
-
-app.MapControllers();
-app.MapPlayEconomyHealthCheck();
-
-app.Run();
