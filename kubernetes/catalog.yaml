@@ -15,6 +15,9 @@ metadata:
 # is going to be managed by this deployment. Remember that the deployment it's nothing more than a way to manage a bunch of parts. So the deployment
 # has to know which parts need to be manage. So that's how we do it.
 spec:
+  # This is where you want to use replicas for pods. Kubernetes will take care of scheduling these pod replicas onto available nodes in the cluster.
+  # Multiple pod replicas can run on the same node if the node has sufficient resources to accommodate them.
+  # replicas: 3
   selector:
     matchLabels:
       app: catalog
@@ -144,3 +147,22 @@ metadata:
     azure.workload.identity/client-id: 14c0078b-f978-459e-881c-2f791d9cda48
   labels:
     azure.workload.identity/use: "true"
+# ---
+# # Configure HorizontalPodAutoscaler or HPA. If a pod exceeds 70% memory, it will automatically produce a new replica.
+# apiVersion: autoscaling/v2beta2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: catalog-hpa
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment # Change to ReplicaSet if needed
+#     name: catalog-deployment # Name of your Deployment or ReplicaSet
+#   minReplicas: 1 # Minimum number of replicas
+#   maxReplicas: 10 # Maximum number of replicas
+#   metrics:
+#     - type: Resource
+#       resource:
+#         name: memory
+#         # if pod exceeds 70% memory, it will create a new replica
+#         targetAverageUtilization: 70 # Target memory utilization (percentage)
