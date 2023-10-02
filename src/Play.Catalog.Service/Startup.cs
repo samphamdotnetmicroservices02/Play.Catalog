@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Play.Catalog.Service.Entities;
+using Play.Catalog.Service.Identity;
 using Play.Common.HealthChecks;
 using Play.Common.Identity;
 using Play.Common.MassTransit;
@@ -34,7 +35,7 @@ namespace Play.Catalog.Service
             services.AddMongo()
                     .AddMongoRepository<Item>("items")
                     .AddMassTransitWithMessageBroker(Configuration)
-                    .AddJwtBearerAuthentication();
+                    .AddJwtBearerAuthenticationCatalog();
 
             services.AddAuthorization(options =>
             {

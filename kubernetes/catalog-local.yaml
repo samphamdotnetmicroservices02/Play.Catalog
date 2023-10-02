@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-deployment
+spec:
+  # replicas: 3
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      containers:
+        - name: catalog
+          image: play.catalog:1.0.11
+          env:
+            - name: RabbitMqSettings__Host
+              # for window open command prompt and run "ipconfig", choose IPV4
+              #  value: "172.26.112.1"
+              # for mac open wifi and and click details on your name of wifi you are connecting and check IP address
+              value: "192.168.1.13"
+            - name: MongoDbSettings__Host
+              # for window open command prompt and run "ipconfig", choose IPV4
+              #  value: "172.26.112.1"
+              # for mac open wifi and and click details on your name of wifi you are connecting and check IP address
+              value: "192.168.1.13"
+            - name: ServiceSettings__Authority
+              value: http://playeconomyapigateway.com/identity-svc
+            - name: ServiceSettings__IsKubernetesLocal
+              value: "true"
+
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "150m"
+          ports:
+            - containerPort: 5000
+
+          # Kubernetes health probes
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 5000
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 5000
+            initialDelaySeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-service
+spec:
+  type: ClusterIP
+  selector:
+    app: catalog
+  ports:
+    - port: 80
+      targetPort: 5000
+# ---
+# # Configure HorizontalPodAutoscaler or HPA. If a pod exceeds 70% memory, it will automatically produce a new replica.
+# apiVersion: autoscaling/v2beta2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: catalog-hpa
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment # Change to ReplicaSet if needed
+#     name: catalog-deployment # Name of your Deployment or ReplicaSet
+#   minReplicas: 1 # Minimum number of replicas
+#   maxReplicas: 10 # Maximum number of replicas
+#   metrics:
+#     - type: Resource
+#       resource:
+#         name: memory
+#         # if pod exceeds 70% memory, it will create a new replica
+#         targetAverageUtilization: 70 # Target memory utilization (percentage)
