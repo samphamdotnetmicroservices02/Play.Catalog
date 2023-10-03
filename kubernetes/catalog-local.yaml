@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: catalog
-          image: play.catalog:1.0.11
+          image: play.catalog:1.0.28
           env:
             - name: RabbitMqSettings__Host
               # for window open command prompt and run "ipconfig", choose IPV4
@@ -25,6 +25,7 @@ spec:
               # for window open command prompt and run "ipconfig", choose IPV4
               #  value: "172.26.112.1"
               # for mac open wifi and and click details on your name of wifi you are connecting and check IP address
+              # or call ifconfig on mac and choose "inet"
               value: "192.168.1.13"
             - name: ServiceSettings__Authority
               value: http://playeconomyapigateway.com/identity-svc

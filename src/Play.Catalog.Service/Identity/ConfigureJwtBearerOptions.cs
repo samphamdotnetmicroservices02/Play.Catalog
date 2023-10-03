@@ -1,4 +1,6 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -40,10 +42,15 @@ public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions
             {
                 options.RequireHttpsMetadata = false;
                 IdentityModelEventSource.ShowPII = true;
-                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+                //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
                 //<service-name>.<namespace>.svc.cluster.local
                 //https://github.com/IdentityServer/IdentityServer4/issues/2450
-                options.MetadataAddress = "http://identity-service.identity.svc.cluster.local/.well-known/openid-configuration";
+                //options.MetadataAddress = "http://identity-service.identity.svc.cluster.local/.well-known/openid-configuration";
+
+                // options.TokenValidationParameters = new TokenValidationParameters
+                // {
+                //     ValidateIssuer = false,
+                // };
             }
 
             /*
