@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: catalog
-          image: play.catalog:1.0.28
+          image: play.catalog:1.0.30
           env:
             - name: RabbitMqSettings__Host
               # for window open command prompt and run "ipconfig", choose IPV4
