@@ -267,3 +267,10 @@ export AKS_OIDC_ISSUER="$(az aks show -n $aksName -g "${appname}" --query "oidcI
 
 az identity federated-credential create --name $namespace --identity-name $namespace --resource-group $appname --issuer $AKS_OIDC_ISSUER --subject "system:serviceaccount:${namespace}:${namespace}-serviceaccount" --audience api://AzureADTokenExchange
 ```
+
+## HPA
+```powershell
+kubectl describe hpa -n $namespace
+
+trace log if your hpa fails
+```

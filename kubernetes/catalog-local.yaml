@@ -66,22 +66,25 @@ spec:
   ports:
     - port: 80
       targetPort: 5000
-# ---
-# # Configure HorizontalPodAutoscaler or HPA. If a pod exceeds 70% memory, it will automatically produce a new replica.
-# apiVersion: autoscaling/v2beta2
-# kind: HorizontalPodAutoscaler
-# metadata:
-#   name: catalog-hpa
-# spec:
-#   scaleTargetRef:
-#     apiVersion: apps/v1
-#     kind: Deployment # Change to ReplicaSet if needed
-#     name: catalog-deployment # Name of your Deployment or ReplicaSet
-#   minReplicas: 1 # Minimum number of replicas
-#   maxReplicas: 10 # Maximum number of replicas
-#   metrics:
-#     - type: Resource
-#       resource:
-#         name: memory
-#         # if pod exceeds 70% memory, it will create a new replica
-#         targetAverageUtilization: 70 # Target memory utilization (percentage)
+---
+# Configure HorizontalPodAutoscaler or HPA. If a pod exceeds 70% memory, it will automatically produce a new replica.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: catalog-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment # Change to ReplicaSet if needed
+    name: catalog-deployment # Name of your Deployment or ReplicaSet
+  minReplicas: 1 # Minimum number of replicas
+  maxReplicas: 3 # Maximum number of replicas
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50
+          # if pod exceeds 0% memory, it will create a new replica
+          # targetAverageUtilization: 50 # Target memory utilization (percentage)
