@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: catalog
-          image: play.catalog:1.0.30
+          image: play.catalog:1.0.4
           env:
             - name: RabbitMqSettings__Host
               # for window open command prompt and run "ipconfig", choose IPV4
@@ -29,6 +29,9 @@ spec:
               value: "192.168.1.13"
             - name: ServiceSettings__Authority
               value: http://playeconomyapigateway.com/identity-svc
+
+            - name: ServiceSettings__InternalHostAuthority
+              value: identity-service.identity.svc.cluster.local
             - name: ServiceSettings__IsKubernetesLocal
               value: "true"
 
