@@ -296,7 +296,7 @@ $chartVersion="0.1.0"
 helm registry login "$acrName.azurecr.io" --username $helmUser --password $helmPassword (login to ACR)
 
 helm upgrade catalog-service oci://$acrName.azurecr.io/helm/microservice --version $chartVersion -f ./helm/values.yaml -n $namespace --install
-helm upgrade catalog-service oci://$acrName.azurecr.io/helm/microservice -f ./helm/values.yaml -n $namespace --install --debug
+helm upgrade catalog-service oci://$acrName.azurecr.io/helm/microservice --version $chartVersion -f ./helm/values.yaml -n $namespace --install --debug
 or 
 helm upgrade catalog-service ./helm -f ./helm/values.yaml -n $namespace --install
 
@@ -335,8 +335,8 @@ chartVersion="0.1.0"
 
 helm registry login "$acrName.azurecr.io" --username $helmUser --password $helmPassword (login to ACR)
 
-helm upgrade catalog-service oci://$acrName.azurecr.io/helm/microservice -f ./helm/values.yaml -n $namespace --install
-helm upgrade catalog-service oci://$acrName.azurecr.io/helm/microservice -f ./helm/values.yaml -n $namespace --install --debug
+helm upgrade catalog-service oci://$acrName.azurecr.io/helm/microservice --version $chartVersion -f ./helm/values.yaml -n $namespace --install
+helm upgrade catalog-service oci://$acrName.azurecr.io/helm/microservice --version $chartVersion -f ./helm/values.yaml -n $namespace --install --debug
 or 
 helm upgrade catalog-service ./helm -f ./helm/values.yaml -n $namespace --install
 
