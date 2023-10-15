@@ -356,3 +356,6 @@ helm rollback catalog-service [REVISION] -n $namespace
 ```
 
 When you roll back, helm will also increase your a number for revision
+
+## Required repository secrets for Github workflow
+GH_PAT: Created in Github user profile --> Settings --> Developer settings --> Personal access token
