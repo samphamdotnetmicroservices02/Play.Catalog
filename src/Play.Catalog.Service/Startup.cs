@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Play.Catalog.Service.Entities;
 using Play.Common.HealthChecks;
 using Play.Common.Identity;
+using Play.Common.Logging;
 using Play.Common.MassTransit;
 using Play.Common.MongoDB;
 using Play.Common.Settings;
@@ -63,6 +64,8 @@ namespace Play.Catalog.Service
 
             services.AddHealthChecks()
                     .AddMongoDb();
+
+            services.AddSeqLogging(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
