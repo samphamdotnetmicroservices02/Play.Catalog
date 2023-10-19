@@ -3,7 +3,7 @@ Common library used by Play Economy services.
 
 ## Create and publish package
 ```powershell
-$version="1.0.7"
+$version="1.0.10"
 $owner="samphamdotnetmicroservices02"
 $gh_pat="[PAT HERE]"
 
@@ -15,7 +15,7 @@ dotnet nuget push ..\packages\Play.Catalog.Contracts.$version.nupkg --api-key $g
 ```
 
 ```zsh
-version="1.0.7"
+version="1.0.10"
 owner="samphamdotnetmicroservices02"
 gh_pat="[PAT HERE]"
 
@@ -291,7 +291,7 @@ kubectl get all -n $namespace (verify you delete all resources)
 $acrName="samphamplayeconomyacr"
 $helmUser=[guid]::Empty.Guid (or helmUser=00000000-0000-0000-0000-000000000000)
 $helmPassword=az acr login --name $acrName --expose-token --output tsv --query accessToken
-$chartVersion="0.1.0"
+$chartVersion="0.1.2"
 
 helm registry login "$acrName.azurecr.io" --username $helmUser --password $helmPassword (login to ACR)
 
@@ -332,7 +332,7 @@ version of your helm chart inside helm/microservice
 acrName="samphamplayeconomyacr"
 helmUser=00000000-0000-0000-0000-000000000000
 export helmPassword="$(az acr login --name $acrName --expose-token --output tsv --query accessToken)"
-chartVersion="0.1.1"
+chartVersion="0.1.2"
 
 helm registry login "$acrName.azurecr.io" --username $helmUser --password $helmPassword (login to ACR)
 
